@@ -1,4 +1,4 @@
-import react, { useState, useEffect } from "react";
+import react, { useState } from "react";
 import "./app.css";
 function App() {
   const [cardList, setCardList] = useState([
@@ -9,25 +9,6 @@ function App() {
   ]);
 
   const [currentCard, setCurrentCard] = useState(null);
-
-  const dropHandler = (e, card) => {
-    e.preventDefault();
-
-    setCardList(
-      cardList.map((c) => {
-        if (c.id === card.id) {
-          return { ...c, order: card.order };
-        }
-        if (c.id === currentCard.id) {
-          return { ...c, order: card.order };
-        }
-        return c;
-      })
-    );
-    console.log(currentCard);
-    e.target.style.background = "#fff";
-  };
-  useEffect(() => {}, [dropHandler]);
 
   const dragStartHandler = (e, card) => {
     setCurrentCard(card);
@@ -46,11 +27,29 @@ function App() {
     e.target.style.background = "lightgreen";
   };
 
+  const dropHandler = (e, card) => {
+    e.preventDefault();
+
+    setCardList(
+      cardList.map((c) => {
+        if (c.id === card.id) {
+          return { ...c, order: card.order - 1 };
+        }
+        if (c.id === currentCard.id) {
+          return { ...c, order: card.order - 1 };
+        }
+        return c;
+      })
+    );
+    console.log(cardList);
+    e.target.style.background = "#fff";
+  };
+
   const sortCards = (a, b) => {
     if (a.order > b.order) {
-      return 1;
+      return 2;
     } else {
-      return -3;
+      return -1;
     }
   };
 
